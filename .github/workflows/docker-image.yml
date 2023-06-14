@@ -1,0 +1,36 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up environment variables
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          PORT: ${{ secrets.PORT }}
+          PRIVATEKEY: ${{ secrets.PRIVATEKEY }}
+          SECRETORPRIVATEKEY: ${{ secrets.SECRETORPRIVATEKEY }}
+        run: |
+          echo "MONGODB_URI=${MONGODB_URI}" >> .env
+          echo "PORT=${PORT}" >> .env
+          echo "PRIVATEKEY=${PRIVATEKEY}" >> .env
+          echo "SECRETORPRIVATEKEY=${SECRETORPRIVATEKEY}" >> .env
+
+      - name: Build and tag the Docker image
+        run: |
+          docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/scores-backend:latest
+
+      - name: Push the Docker image to Docker Hub
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/scores-backend:latest

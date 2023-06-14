@@ -1,0 +1,11 @@
+version: '3'
+services:
+  backend:
+    image: cabreraevil/scores-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 3200:3200
+    container_name: scores-backend
