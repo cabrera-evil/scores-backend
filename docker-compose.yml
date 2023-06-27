@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     restart: on-failure
     ports:
-      - 3200:3200
+      - 3200:3000
     container_name: scores-backend
     env_file:
       - .env.production

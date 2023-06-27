@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the port on which the Express API will listen
-EXPOSE 3200
+EXPOSE 3000
 
 # Start the API server
 CMD [ "npm", "start" ]
